@@ -71,6 +71,9 @@ param createAzureOpenAi bool // Set in main.parameters.json
 @description('Azure OpenAI endpoint to use. If provided, no Azure OpenAI instance will be created.')
 param openAiEndpoint string = ''
 
+param storageConnectionString string = ''
+param storageContainerName string = ''
+
 
 var resourceToken = toLower(uniqueString(subscription().id, name, location))
 var tags = { 'azd-env-name': name }
@@ -153,6 +156,8 @@ module aca 'aca.bicep' = {
     openAiDeploymentName: openAiDeploymentName
     openAiEndpoint: createAzureOpenAi ? openAi.outputs.endpoint : openAiEndpoint
     openAiApiVersion: openAiApiVersion
+    storageConnectionString: storageConnectionString
+    storageContainerName: storageContainerName
     exists: acaExists
   }
 }
@@ -197,3 +202,5 @@ output AZURE_CONTAINER_ENVIRONMENT_NAME string = containerApps.outputs.environme
 output AZURE_CONTAINER_REGISTRY_ENDPOINT string = containerApps.outputs.registryLoginServer
 output AZURE_CONTAINER_REGISTRY_NAME string = containerApps.outputs.registryName
 
+output AZURE_STORAGE_CONNECTION_STRING string = storageConnectionString
+output AZURE_STORAGE_CONTAINER_NAME string = storageContainerName

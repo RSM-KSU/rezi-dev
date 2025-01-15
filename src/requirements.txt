@@ -22,8 +22,12 @@ anyio==4.6.0
 attrs==24.2.0
     # via aiohttp
 azure-core==1.31.0
-    # via azure-identity
+    # via
+    #   azure-identity
+    #   azure-storage-blob
 azure-identity==1.19.0
+    # via quartapp (pyproject.toml)
+azure-storage-blob==12.24.0
     # via quartapp (pyproject.toml)
 blinker==1.8.2
     # via
@@ -46,6 +50,7 @@ click==8.1.7
 cryptography==43.0.1
     # via
     #   azure-identity
+    #   azure-storage-blob
     #   msal
     #   pyjwt
 distro==1.9.0
@@ -84,6 +89,8 @@ idna==3.10
     #   httpx
     #   requests
     #   yarl
+isodate==0.7.2
+    # via azure-storage-blob
 itsdangerous==2.2.0
     # via
     #   flask
@@ -126,7 +133,9 @@ pydantic==2.9.2
 pydantic-core==2.23.4
     # via pydantic
 pyjwt[crypto]==2.9.0
-    # via msal
+    # via
+    #   msal
+    #   pyjwt
 python-dotenv==1.0.1
     # via quartapp (pyproject.toml)
 pyyaml==6.0.2
@@ -150,6 +159,7 @@ typing-extensions==4.12.2
     # via
     #   azure-core
     #   azure-identity
+    #   azure-storage-blob
     #   openai
     #   pydantic
     #   pydantic-core

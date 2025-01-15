@@ -7,6 +7,11 @@ from azure.identity.aio import (
     ManagedIdentityCredential,
     get_bearer_token_provider,
 )
+from azure.storage.blob import (
+    BlobServiceClient,
+    BlobClient,
+    ContainerClient
+)
 from openai import AsyncAzureOpenAI
 from quart import (
     Blueprint,
@@ -19,6 +24,30 @@ from quart import (
 
 bp = Blueprint("chat", __name__, template_folder="templates", static_folder="static")
 
+
+async def read_prompt_from_blob(rezensionsplattform: str) -> str:
+    # Retrieve the connection string from environment variables
+    connect_str = os.getenv('AZURE_STORAGE_CONNECTION_STRING')
+    if not connect_str:
+        raise ValueError("AZURE_STORAGE_CONNECTION_STRING environment variable is not set")
+    
+    container_name = os.getenv('AZURE_STORAGE_CONTAINER_NAME')
+    if not container_name:
+        raise ValueError("AZURE_STORAGE_CONTAINER_NAME environment variable is not set")
+
+    # Create a BlobServiceClient object
+    blob_service_client = BlobServiceClient.from_connection_string(connect_str)
+
+    # Get a ContainerClient object
+    container_client = blob_service_client.get_container_client(container_name)
+
+    # Get a BlobClient object
+    blob_client = container_client.get_blob_client(f"{rezensionsplattform}.txt")
+
+    # Download the blob's content as text
+    blob_data = blob_client.download_blob()
+    text = blob_data.readall()
+    return text.decode('utf-8')
 
 @bp.before_app_serving
 async def configure_openai():
@@ -73,10 +102,14 @@ async def chat_handler():
 
     @stream_with_context
     async def response_stream():
-        # This sends all messages, so API request may exceed token limits
+
+        rezensionsplattform = request_messages["rezensionsplattform"]
+
+        prompt = await read_prompt_from_blob(rezensionsplattform)
+
         all_messages = [
-            {"role": "system", "content": "You are a helpful assistant."},
-        ] + request_messages
+            {"role": "system", "content": prompt},
+        ] + [request_messages['message']]
 
         chat_coroutine = bp.openai_client.chat.completions.create(
             # Azure Open AI takes the deployment name as the model name

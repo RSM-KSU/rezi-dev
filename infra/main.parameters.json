@@ -55,6 +55,12 @@
       },
       "disableKeyBasedAuth": {
         "value": "${DISABLE_KEY_BASED_AUTH=true}"
+      },
+      "storageConnectionString": {
+        "value": "${AZURE_STORAGE_CONNECTION_STRING}"
+      },
+      "storageContainerName": {
+        "value": "${AZURE_STORAGE_CONTAINER_NAME}"
       }
     }
   }
