@@ -71,10 +71,6 @@ param createAzureOpenAi bool // Set in main.parameters.json
 @description('Azure OpenAI endpoint to use. If provided, no Azure OpenAI instance will be created.')
 param openAiEndpoint string = ''
 
-param storageConnectionString string = ''
-param storageContainerName string = ''
-
-
 var resourceToken = toLower(uniqueString(subscription().id, name, location))
 var tags = { 'azd-env-name': name }
 
@@ -156,8 +152,6 @@ module aca 'aca.bicep' = {
     openAiDeploymentName: openAiDeploymentName
     openAiEndpoint: createAzureOpenAi ? openAi.outputs.endpoint : openAiEndpoint
     openAiApiVersion: openAiApiVersion
-    storageConnectionString: storageConnectionString
-    storageContainerName: storageContainerName
     exists: acaExists
   }
 }
@@ -184,6 +178,16 @@ module openAiRoleBackend 'core/security/role.bicep' = if (createAzureOpenAi) {
   }
 }
 
+module storageRoleBackend 'core/security/role.bicep' = {
+  scope: resourceGroup
+  name: 'storage-role-backend'
+  params: {
+    principalId: aca.outputs.SERVICE_ACA_IDENTITY_PRINCIPAL_ID
+    roleDefinitionId: '2a2b9908-6ea1-4ae2-8e65-a410df84e7d1'
+    principalType: 'ServicePrincipal'
+  }
+}
+
 output AZURE_LOCATION string = location
 output AZURE_TENANT_ID string = tenant().tenantId
 
@@ -201,6 +205,3 @@ output SERVICE_ACA_IMAGE_NAME string = aca.outputs.SERVICE_ACA_IMAGE_NAME
 output AZURE_CONTAINER_ENVIRONMENT_NAME string = containerApps.outputs.environmentName
 output AZURE_CONTAINER_REGISTRY_ENDPOINT string = containerApps.outputs.registryLoginServer
 output AZURE_CONTAINER_REGISTRY_NAME string = containerApps.outputs.registryName
-
-output AZURE_STORAGE_CONNECTION_STRING string = storageConnectionString
-output AZURE_STORAGE_CONTAINER_NAME string = storageContainerName

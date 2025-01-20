@@ -10,8 +10,6 @@ param exists bool
 param openAiDeploymentName string
 param openAiEndpoint string
 param openAiApiVersion string
-param storageConnectionString string
-param storageContainerName string
 
 resource acaIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
   name: identityName
@@ -39,14 +37,6 @@ var env = [
     // DefaultAzureCredential will look for an environment variable with this name:
     name: 'AZURE_CLIENT_ID'
     value: acaIdentity.properties.clientId
-  }
-  {
-    name: 'AZURE_STORAGE_CONNECTION_STRING'
-    value: storageConnectionString
-  }
-  {
-    name: 'AZURE_STORAGE_CONTAINER_NAME'
-    value: storageContainerName
   }
 ]
 

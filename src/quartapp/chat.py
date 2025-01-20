@@ -6,10 +6,9 @@ from azure.identity.aio import (
     ChainedTokenCredential,
     ManagedIdentityCredential,
     get_bearer_token_provider,
+    DefaultAzureCredential
 )
-from azure.storage.blob import (
-    BlobServiceClient,
-    BlobClient,
+from azure.storage.blob.aio import (
     ContainerClient
 )
 from openai import AsyncAzureOpenAI
@@ -27,26 +26,18 @@ bp = Blueprint("chat", __name__, template_folder="templates", static_folder="sta
 
 async def read_prompt_from_blob(rezensionsplattform: str) -> str:
     # Retrieve the connection string from environment variables
-    connect_str = os.getenv('AZURE_STORAGE_CONNECTION_STRING')
-    if not connect_str:
-        raise ValueError("AZURE_STORAGE_CONNECTION_STRING environment variable is not set")
-    
-    container_name = os.getenv('AZURE_STORAGE_CONTAINER_NAME')
-    if not container_name:
-        raise ValueError("AZURE_STORAGE_CONTAINER_NAME environment variable is not set")
+    azure_credential = DefaultAzureCredential(exclude_shared_token_cache_credential=True)
 
-    # Create a BlobServiceClient object
-    blob_service_client = BlobServiceClient.from_connection_string(connect_str)
-
-    # Get a ContainerClient object
-    container_client = blob_service_client.get_container_client(container_name)
+    container_client = ContainerClient(
+        "https://rossmannrezi.blob.core.windows.net", 'prompts', credential=azure_credential
+    )
 
     # Get a BlobClient object
     blob_client = container_client.get_blob_client(f"{rezensionsplattform}.txt")
 
     # Download the blob's content as text
-    blob_data = blob_client.download_blob()
-    text = blob_data.readall()
+    blob_data = await blob_client.download_blob()
+    text = await blob_data.readall()
     return text.decode('utf-8')
 
 @bp.before_app_serving

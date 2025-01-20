@@ -4,115 +4,90 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-	<title>Rezi</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
-        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"
-        integrity="sha256-4RctOgogjPAdwGbwq+rxfwAmSpZhWaafcZR9btzUk18=" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.2.3/dist/cosmo/bootstrap.min.css"
-        integrity="sha256-axRDISYf7Hht1KhcMnfDV2nq7hD/8Q9Rxa0YlW/o3NU=" crossorigin="anonymous">
-    <link rel="icon" href="{{ url_for('static', filename='assets/ROSSMANN_Schmucklogo_Standard_Schutzzone_RGB.svg') }}" type="image/x-icon">
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        html, body {
-            height: 100%;
-            font-size: 20px;
-        }
-
-        .navbar-brand {
-            font-size: 1.5rem;
-        }
-
-        #messages .toast-container {
-            margin-bottom: 12px;
-        }
-
-        #rezensionsplattform {
-            max-width: 150px;
-        }
-        #rezensionsplattform:focus {
-            outline: none;
-            box-shadow: none;
-        }
-        #message:focus {
-            box-shadow: none;
-        }
-
-        .background-user {
-            background-color: #c3002d;
-        }
-
-        .background-assistant {
-            background-color: #c3002d;
-        }
-        .no-shadow {
-            box-shadow: none !important;
-        }
-    </style>
+	<title>ROSSMANN Rezi</title>
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
+        crossorigin="anonymous">
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"
+        integrity="sha256-4RctOgogjPAdwGbwq+rxfwAmSpZhWaafcZR9btzUk18="
+        crossorigin="anonymous">
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootswatch@5.2.3/dist/cosmo/bootstrap.min.css"
+        integrity="sha256-axRDISYf7Hht1KhcMnfDV2nq7hD/8Q9Rxa0YlW/o3NU="
+        crossorigin="anonymous">
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='styles.css') }}">
+    <link
+        rel="icon"
+        href="{{ url_for('static', filename='assets/ROSSMANN_Schmucklogo_Standard_Schutzzone_RGB.svg') }}"
+        type="image/x-icon">
 </head>
 <body>
-    <main class="h-100 mh-100 d-flex flex-column overflow-hidden justify-content-start">
+    <main class="h-100 mh-100 d-flex flex-column overflow-hidden">
         
-        <nav class="navbar background-user">
-            <div class="container-fluid">
+        <nav class="navbar background">
+            <div class="container-fluid center px-2">
                 <span class="navbar-brand text-light">
-                    Rossmann Rezi
+                    <img
+                        src="{{ url_for('static', filename='assets/ROSSMANN_Schmucklogo_Standard_Schutzzone_Negativ_RGB.svg') }}"
+                        alt="Rezi"
+                        class="d-inline-block align-text-center">
+                    Rezi <span class="tagline"> | Dein Assistent für Rezensionen </span>
                 </span>
-                <buttton class="btn btn-light" onclick="location.reload()" style="font-size: 20px;">
-                    <i class="bi bi-trash" aria-hidden="true"></i> Verlauf leeren
+                <i class="bi bi-trash icon-link" title="Verlauf löschen" aria-hidden="true" onclick="location.reload()"></i>
             </div>
         </nav>
 
-        <div id="messages" class="px-4 pb-4 pt-2 flex-grow-1 overflow-y-auto overflow-x-hidden align-items-stretch">
+        <div id="messages" class="center px-2 pt-2 flex-grow-1 overflow-y-auto overflow-x-hidden justify-content-center align-items-stretch">
 
             <template id="message-template-user">
-                <div class="toast-container position-relative w-100 d-flex flex-column align-items-stretch bottom-0">
-                        <div class="toast show w-75 rounded-3 align-self-end no-shadow">
-                            <div class="toast-header text-light background-user">
-                                <i class="bi bi-person me-1" aria-hidden="true"></i>
-                                <strong class="me-auto text-capitalize">
-                                    Rezension
-                                </strong>
-                            </div>
-                            <div class="toast-body message-content">
-                            </div>
+                <div class="toast-container position-relative w-100 d-flex flex-column align-items-stretch bottom-0 mb-2">
+                    <div class="toast show w-75 rounded-3 align-self-end no-shadow">
+                        <div class="toast-header text-light background">
+                            <i class="bi bi-handbag-fill me-1" aria-hidden="true"></i>
+                            <strong class="me-auto">
+                                Deine Rezension von <span class="platform-name"></span>
+                            </strong>
                         </div>
+                        <div class="toast-body message-content"> </div>
+                    </div>
                 </div>
             </template>
 
             <template id="message-template-assistant">
-                <div class="toast-container position-relative w-100 d-flex flex-column align-items-stretch">
-                        <div class="toast fade show w-75 rounded-3 align-self-start no-shadow">
-                            <div class="toast-header text-light background-assistant">
-                                <i class="bi bi-robot me-1" aria-hidden="true"></i>
-                                <strong class="me-auto">
-                                    Vom Assistanten generierte Antwort
-                                </strong>
-                                <button class="btn btn-light btn-sm ms-auto" onclick="copyAssistantMessage(this)">
-                                    <i class="bi bi-clipboard" aria-hidden="true"></i> Kopieren
-                                </button>
-                            </div>
-                            <div class="toast-body message-content">
-                                <em class="typing-indicator">Antwort wird generiert...</em>
-                            </div>
+                <div class="toast-container position-relative w-100 d-flex flex-column align-items-stretch mb-2">
+                    <div class="toast fade show w-75 rounded-3 align-self-start no-shadow">
+                        <div class="toast-header text-light background">
+                            <i class="bi bi-stars me-1" aria-hidden="true"></i>
+                            <strong class="me-auto">
+                                Von Rezi generierte Antwort
+                            </strong>
+                            <i id="copy-message" title="Antwort kopieren" class="bi bi-clipboard icon-link" style="visibility: hidden;" onclick="copyAssistantMessage(this)" aria-hidden="true"></i>
                         </div>
+                        <div class="toast-body message-content">
+                            <em class="typing-indicator">Antwort wird generiert</em>
+                        </div>
+                    </div>
                 </div>
             </template>
 
         </div>
-        <div id="chat-area" class="text-light px-4 py-2 text-dark d-flex flex-column justify-content-center background-user">
+        <div id="chat-area" class="center text-light px-2 py-2 text-dark">
             <form id="chat-form">
                 <div class="input-group">
                     <select class="form-select" id="rezensionsplattform" name="rezensionsplattform">
-                        <option value="google" selected>Google</option>
-                        <option value="trustpilot">Trustpilot</option>
-                        <option value="kununu">Kununu</option>
+                        <option value="Google" selected>Google</option>
+                        <option value="Trustpilot">Trustpilot</option>
+                        <option value="Kununu">Kununu</option>
                     </select>
-                    <textarea id="message" name="message"  class="form-control" rows="3" type="text" rows="1" placeholder="Die Rezension bitte hier einfügen!" aria-label="Ask ChatGPT"></textarea>
-                    <button type="submit" class="btn btn-outline-light">
+                    <textarea id="message" name="message"  class="form-control" rows="3" type="text" placeholder="Wähle links die passende Plattform aus und gib hier die Rezension ein. Ich erstelle dann einen Vorschlag für eine Antwort. " aria-label="Ask ChatGPT"></textarea>
+                    <button type="submit" class="btn submit-button">
                         <i class="bi bi-send-fill" aria-hidden="true"></i>
                     </button>
                 </div>
@@ -122,6 +97,8 @@
     <script src="https://cdn.jsdelivr.net/npm/showdown@2.1.0/dist/showdown.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@microsoft/ai-chat-protocol@1.0.0-beta.20240610.1/dist/iife/index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
 
     <script>
         const form = document.getElementById("chat-form");
@@ -135,32 +112,46 @@
 
         const client = new ChatProtocol.AIChatProtocolClient("/chat");
 
-        function copyAssistantMessage(button) {
-            const messageContent = button.closest('.toast').querySelector('.message-content').innerText;
-            navigator.clipboard.writeText(messageContent).then(() => {
-                console.log('Message copied to clipboard');
-            }).catch(err => {
-                console.error('Failed to copy text: ', err);
-            });
+        function copyAssistantMessage(iconElement) {
+            // Copy the message content to the clipboard
+            const messageContent = iconElement.closest('.toast').querySelector('.message-content').innerText;
+            navigator.clipboard.writeText(messageContent);
+
+            // Change the icon to check
+            iconElement.classList.remove('bi-clipboard');
+            iconElement.classList.add('bi-clipboard-check-fill');
+
+            // Change the icon back to clipboard after 10 seconds
+            setTimeout(() => {
+                iconElement.classList.remove('bi-clipboard-check-fill');
+                iconElement.classList.add('bi-clipboard');
+            }, 3000);
         }
 
         form.addEventListener("submit", async function(e) {
 
             e.preventDefault();
             const message_input = messageInput.value;
-
+            if (!message_input) {
+                return;
+            }
+            
             const userTemplateClone = userTemplate.content.cloneNode(true);
             userTemplateClone.querySelector(".message-content").innerText = message_input;
+            userTemplateClone.querySelector(".platform-name").innerText = rezensionsplattform.value;
             targetContainer.appendChild(userTemplateClone);
 
             const assistantTemplateClone = assistantTemplate.content.cloneNode(true);
             let messageDiv = assistantTemplateClone.querySelector(".message-content");
             targetContainer.appendChild(assistantTemplateClone);
 
-            targetContainer.scrollTop = targetContainer.scrollHeight;
+            messageInput.value = "";
+            $("#messages").animate({ scrollTop: $("#messages")[0].scrollHeight }, 400);
+    
+            const clipboardIcon = messageDiv.closest('.toast').querySelector('#copy-message');
 
             message = {
-                "rezensionsplattform": rezensionsplattform.value,
+                "rezensionsplattform": rezensionsplattform.value.toLowerCase(),
                 "message": {
                     "role": "user",
                     "content": message_input
@@ -179,6 +170,7 @@
                         // Clear out the DIV if its the first answer chunk we've received
                         if (answer == "") {
                             messageDiv.innerHTML = "";
+                            clipboardIcon.style.visibility = 'visible';
                         }
                         answer += response.delta.content;
                         messageDiv.innerHTML = converter.makeHtml(answer);
@@ -190,10 +182,16 @@
                 }
             } catch (error) {
                 messageDiv.innerHTML = "Error: " + error;
+                clipboardIcon.style.visibility = 'visible';
             }
             targetContainer.scrollTop = targetContainer.scrollHeight;
-            messageInput.value = "";
         });
+        $('#message').on('keydown', function(event) {
+            if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault();
+                form.dispatchEvent(new Event('submit'));
+            }
+        })
     </script>
 </body>
 </html>

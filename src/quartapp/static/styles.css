@@ -1,41 +1,142 @@
-* {
-    box-sizing: border-box;
-}
-
 html, body {
     height: 100%;
-    font-size: 20px;
+    font-size: 18px;
+    background-color: #F5F5F5;
 }
 
 .navbar-brand {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
+    max-width: 400px;
+    line-height: 35px;
 }
 
-#messages .toast-container {
-    margin-bottom: 12px;
+.navbar-brand img {
+    height: 2em;
+}
+
+.navbar-brand .tagline {
+    display: inline;
+}
+
+@media (max-width: 430px) {
+    .navbar-brand .tagline {
+        display: none;
+    }
+}
+
+.center {
+    max-width: 1200px;
+    width: 100%;
+    align-self: center;
+}
+
+#messages::-webkit-scrollbar {
+    display: none;
+}
+
+#messages {
+    -ms-overflow-style: none; 
+    scrollbar-width: none; 
+}
+
+.icon-link {
+    cursor: pointer;
+    color: white;
+}
+
+.icon-link:hover {
+    color: #EBEBEB;
 }
 
 #rezensionsplattform {
-    max-width: 150px;
+    max-width: 145px;
 }
 
-#rezensionsplattform:focus {
+
+#rezensionsplattform:hover {
+    cursor: pointer;
+}
+
+@media (max-width: 500px) {
+    #rezensionsplattform {
+        max-width: 110px;
+    }
+}
+
+#rezensionsplattform:focus, #message:focus, .submit-button:focus {
     outline: none;
     box-shadow: none;
+    border: 1px solid #c3002d
 }
 
-#message:focus {
-    box-shadow: none;
-}
-
-.background-user {
+.submit-button:hover {
     background-color: #c3002d;
 }
 
-.background-assistant {
+.submit-button:hover .bi-send-fill {
+    color: white;
+}
+
+.bi-send-fill {
+    color: #c3002d;
+}
+
+.submit-button {
+    border: rgb(206, 212, 218) solid 1px !important;
+}
+
+#rezensionsplattform, #message, .submit-button {
+    background-color: white;
+}
+
+.background {
     background-color: #c3002d;
 }
 
 .no-shadow {
     box-shadow: none !important;
+}
+
+.form-select {
+    border-top-left-radius: 7.5px;
+    border-bottom-left-radius: 7.5px;
+}
+
+.input-group {
+    border-radius: 15px;
+    box-shadow: 0 8px 16px #d1d1d1;
+}
+
+.typing-indicator {
+    display: inline-block;
+}
+
+.typing-indicator::after {
+    content: '..';
+    animation: dots 1s steps(5, end) infinite;
+}
+
+@keyframes dots {
+    0%, 20% {
+        color: rgba(0,0,0,0);
+        text-shadow:
+            .25em 0 0 rgba(0,0,0,0),
+            .5em 0 0 rgba(0,0,0,0);
+    }
+    40% {
+        color: black;
+        text-shadow:
+            .25em 0 0 rgba(0,0,0,0),
+            .5em 0 0 rgba(0,0,0,0);
+    }
+    60% {
+        text-shadow:
+            .25em 0 0 black,
+            .5em 0 0 rgba(0,0,0,0);
+    }
+    80%, 100% {
+        text-shadow:
+            .25em 0 0 black,
+            .5em 0 0 black;
+    }
 }
